@@ -10,9 +10,9 @@
 @include('includes.errors')
 
 
-<?php
- addtexto("Añadir Especialidades, acciones al programa");
-?>
+
+{!! addtexto("Añadir Especialidades, acciones al programa") !!}
+
   
 <div class="row">
   <div class="col-sm-12">
@@ -23,25 +23,28 @@
 	<br>
 
     <form role="form" id="form" class="form" action="{!! url('/Especiprog') !!}" method="post">
-    {!! csrf_field() !!}
-
-    <input type="hidden" name="idprog" value="{!!$idprog!!}">
     
-    <div class="form-group col-sm-6">
-      <label class="control-label text-left mar10">Selecciona Especialidad:</label>
-      
-      <select name="idesp" class="form-control" required>
+	    {!! csrf_field() !!}
 
-		@foreach($especiali as $especi)
+	    <input type="hidden" name="idprog" value="{!!$idprog!!}">
+	    
+	    <div class="form-group col-sm-6">
+	      <label class="control-label text-left mar10">Selecciona Especialidad:</label>
+	      
+	      <select name="idesp" class="form-control" required>
 
-      	  	<option value="{!!$especi->idesp!!}">{!!$especi->nomesp!!}</option>
-		
-		@endforeach
-      
-      </select>
-    </div>	
-		
-	@include('includes.subutton')
+			@foreach($especiali as $especi)
+
+				@continue($especi->nomesp == 'ninguna')
+
+	      	  	<option value="{!!$especi->idesp!!}">{!!$especi->nomesp!!}</option>
+			
+			@endforeach
+	      
+	      </select>
+	    </div>	
+			
+		@include('includes.subutton')
     
     </form>
   </div>

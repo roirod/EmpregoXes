@@ -55,6 +55,9 @@
 	   <table class="table table-hover">
 	
 			@foreach ($especiali as $especia)
+
+				@continue($especia->nomesp == 'ninguna')
+
 				<tr>	
 					 <td class="wid290">{!!$especia->nomesp!!}</td>
 

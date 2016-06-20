@@ -20,7 +20,10 @@ class EspecialiController extends Controller
     {   
         $numpag = 30;
 
-        $especiali = DB::table('especiali')->orderBy('nomesp', 'ASC')->paginate($numpag);
+        $especiali = DB::table('especiali')
+                        ->whereNull('deleted_at')
+                        ->orderBy('nomesp', 'ASC')
+                        ->paginate($numpag);
               
         return view('espe.index', [
             'especiali' => $especiali,
@@ -34,7 +37,7 @@ class EspecialiController extends Controller
    	
 	  	if ( isset($busca) ) {
 		    $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8"); 		  
-  		    $especiali = DB::table('especiali')->where('nomesp','LIKE','%'.$busca.'%')->orderBy('nomesp','ASC')->get();
+  		    $especiali = DB::table('especiali')->where('nomesp','LIKE','%'.$busca.'%')->whereNull('deleted_at')->orderBy('nomesp','ASC')->get();
   		} 
   		     
         return view('espe.ver', [
@@ -45,8 +48,7 @@ class EspecialiController extends Controller
     }  
        
     public function show(Request $request)
-    {    
-    }
+    { }
 
     public function create(Request $request)
     {
@@ -55,28 +57,32 @@ class EspecialiController extends Controller
 
     public function store(Request $request)
     {
-
-        $nomesp = ucfirst(strtolower( $request->input('nomesp') ) );
-        $nomesp = htmlentities (trim($nomesp),ENT_QUOTES,"UTF-8");
+        $nomesp = ucfirst($request->input('nomesp'));
+        $nomesp = htmlentities(trim($nomesp),ENT_QUOTES,"UTF-8");
 
         $especiali = DB::table('especiali')->orderBy('nomesp','ASC')->get();
 
         foreach ($especiali as $especia) {
              if ( $nomesp == $especia->nomesp ) {
-               $request->session()->flash('errmess', 'Nombre ya en uso, use otro!!!'); 
-               return redirect('Especiali/create');            
+                $messa = 'Repetido: '.$nomesp.', ya existe.';
+
+                $request->session()->flash('errmess', $messa);
+
+                return redirect('Especiali/create')->withInput();          
              }
         }
 
         $validator = Validator::make($request->all(),[
-            'nomesp' => 'required|unique:especiali|max:222'
+            'nomesp' => 'required|unique:especiali|max:166'
         ]);
-                       
+
         if ($validator->fails()) {
-             return redirect("Especiali/create")
-                         ->withErrors($validator)
+            $messa = 'Repetido: '.$nomesp.', ya existe.';
+            $request->session()->flash('errmess', $messa);
+
+            return redirect("Especiali/create")
                          ->withInput();
-         } else { 
+        } else {  
 
              especiali::create([
                'nomesp' => $nomesp
@@ -85,7 +91,7 @@ class EspecialiController extends Controller
              $request->session()->flash('sucmess', 'Hecho!!!');    
                                
              return redirect('Especiali/create');
-         }  
+        }  
     }
   
     public function edit(Request $request,$idesp)
@@ -111,22 +117,39 @@ class EspecialiController extends Controller
      	  if ( empty($idesp) ) {
     	  	return redirect('Clientes');
         }   
+
+        $idesp = htmlentities (trim($idesp),ENT_QUOTES,"UTF-8"); 
+
+        $nomesp = ucfirst($request->input('nomesp'));
+        $nomesp = htmlentities(trim($nomesp),ENT_QUOTES,"UTF-8");
+
+        $especiali = DB::table('especiali')->orderBy('nomesp','ASC')->get();
+
+        foreach ($especiali as $especia) {
+             if ( $nomesp == $especia->nomesp ) {
+                $messa = 'Repetido: '.$nomesp.', ya existe.';
+
+                $request->session()->flash('errmess', $messa);
+
+                return redirect("Especiali/$idesp/edit")->withInput();          
+             }
+        }
  
         $validator = Validator::make($request->all(),[
-            'nomesp' => 'required|unique:especiali|max:222'
+            'nomesp' => 'required|unique:especiali|max:166'
         ]);
-                       
-        if ($validator->fails()) {
-             return redirect("Especiali/$idesp/edit")
-                         ->withErrors($validator)
-                         ->withInput();
-         } else {    
 
-            $idesp = htmlentities (trim($idesp),ENT_QUOTES,"UTF-8");   
+        if ($validator->fails()) {
+            $messa = 'Repetido: '.$nomesp.', ya existe.';
+            $request->session()->flash('errmess', $messa);
+
+            return redirect("Especiali/$idesp/edit")
+                         ->withInput();
+        } else {           
                     
             $especiali = especiali::find($idesp);
                     
-            $nomesp = ucfirst(strtolower( $request->input('nomesp') ) );
+            $nomesp = ucfirst($request->input('nomesp'));
                         
             $especiali->nomesp = htmlentities (trim($nomesp),ENT_QUOTES,"UTF-8");
             
@@ -161,12 +184,10 @@ class EspecialiController extends Controller
       	  	return redirect('Clientes');
       	}   
 
-        $idesp = htmlentities (trim($idesp),ENT_QUOTES,"UTF-8"); 
-        
-        $especiali = especiali::find($idesp);
-      
-        $especiali->delete();
+        $idesp = htmlentities (trim($idesp),ENT_QUOTES,"UTF-8");
 
+        especiali::destroy($idesp);
+        
         $request->session()->flash('sucmess', 'Hecho!!!');
         
         return redirect('Especiali');

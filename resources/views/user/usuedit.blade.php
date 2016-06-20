@@ -2,17 +2,11 @@
 
 @section('content')
 
-
-<div class="row">
-  <div class="col-sm-12">
-    <ul class="nav nav-pills bgtra mar10">
-      <li><a  href="{!!url('/Ajustes')!!}"> Ajustes </a></li>
-    </ul>
-  </div>
-</div>
-
+@include('includes.usunav')
 
 @include('includes.messages')
+@include('includes.errors')
+
 
  <div class="row">
    <div class="col-sm-12 mar10">

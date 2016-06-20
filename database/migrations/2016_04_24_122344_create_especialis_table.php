@@ -16,6 +16,7 @@ class CreateEspecialisTable extends Migration
             $table->increments('idesp');
             $table->char('nomesp', 166);
             $table->timestamps();
+            $table->softDeletes();
             $table->unique('nomesp');
         });
     }

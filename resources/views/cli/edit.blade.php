@@ -24,7 +24,7 @@
 	    
 	    <div class="form-group col-sm-4">
 	      <label class="control-label text-left mar10">Apellidos:</label>
-		   <input type="text" class="form-control" pattern=".{1,111}" maxlength="111" name="apecli" value="{!!$cliente->apecli!!}" required>
+		   <input type="text" class="form-control" pattern=".{1,111}" maxlength="111" autofocus="autofocus" name="apecli" value="{!!$cliente->apecli!!}" required>
 		 </div>
 			
 		 <div class="form-group col-sm-3">
@@ -34,12 +34,12 @@
 		 
 		 <div class="form-group col-sm-4">
 		   <label class="control-label text-left mar10">Poblaci&#xF3;n:</label>
-			<input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="pobla" value="{!!$cliente->pobla!!}">
+			<input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="pobla" value="{!!$cliente->pobla!!}">
 		 </div>  
 		 
 		 <div class="form-group col-sm-4">
 		   <label class="control-label text-left mar10">Direcci&#xF3;n:</label>
-			<input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="direc" value="{!!$cliente->direc!!}">
+			<input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="direc" value="{!!$cliente->direc!!}">
 		 </div>
 		 
 		 <div class="form-group col-sm-2">

@@ -7,24 +7,23 @@
 @include('includes.messages')
 @include('includes.errors')
 
-<?php
- $texto = "Añadir Especialidad";
- addtexto($texto);
-?>
-  
+
+{!! addtexto("Añadir Especialidad") !!}
+
+
 <div class="row">
   <div class="col-sm-12">
     <form role="form" id="form" class="form" action="{!! url('/Especiali') !!}" method="post">
-    {!! csrf_field() !!}
-    
-    <div class="row">
-	    <div class="form-group col-sm-6">
-	      <label class="control-label text-left mar10">Nombre:</label>
-		   <input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="nomesp" value="{!! old('nomesp') !!}" required>
+	    {!! csrf_field() !!}
+	    
+	    <div class="row">
+		    <div class="form-group col-sm-6">
+		      <label class="control-label text-left mar10">Nombre:</label>
+			   <input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="nomesp" value="{!! old('nomesp') !!}" required>
+			</div>
 		</div>
-	</div>
-	 
-	@include('includes.subutton')
+		 
+		@include('includes.subutton')
     
     </form>
   </div>

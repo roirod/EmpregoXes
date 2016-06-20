@@ -1,0 +1,40 @@
+
+
+
+php artisan migrate
+
+php artisan db:seed --class=UsersTableSeeder
+
+php artisan db:seed --class=cliSeeder
+
+php artisan db:seed --class=espeSeeder
+
+
+ln -s /var/www/emprego/public/assets /var/www/emprego/storage/app/
+ln -s /var/www/emprego/storage/app /var/www/emprego/public/
+
+ 
+sudo chmod -R 770 /var/www
+sudo chown -R www-data:www-data /var/www
+sudo service php7.0-fpm restart
+sudo service nginx restart
+
+
+
+
+Add the following line to http or server or location context to increase the size limit in nginx.conf, enter:
+/etc/nginx/nginx.conf
+client_max_body_size 100M;
+
+service nginx reload
+
+grep -E "upload_max_filesize|memory_limit|post_max_size" /etc/php5/fpm/php.ini
+
+
+sudo pcmanfm
+
+
+sudo ip addr show eth0 | grep inet
+sudo lspci
+sudo ifconfig
+sudo ip addr show enp1s0 | grep inet

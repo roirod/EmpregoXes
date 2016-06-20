@@ -14,6 +14,7 @@ class CreateProgramasTable extends Migration
             $table->date('fefin');
             $table->text('notas')->nullable();         
             $table->timestamps();
+            $table->softDeletes();
             $table->index('feini');
             $table->unique('nomprog');
         });

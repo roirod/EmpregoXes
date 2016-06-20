@@ -51,6 +51,7 @@ class BuscadorController extends Controller
                 ->join('clientes', 'titucli.idcli','=','clientes.idcli')
                 ->select('titucli.*','clientes.*')
                 ->whereRaw("($strin)")
+                ->whereNull('clientes.deleted_at')
                 ->groupBy('titucli.idcli')
                 ->havingRaw("COUNT(*) = $count")
                 ->get();

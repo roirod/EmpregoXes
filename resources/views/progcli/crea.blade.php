@@ -35,7 +35,7 @@
 		   
 		   <select name="idprog" class="form-control" required>
 		   
-			     <option value="0" selected> </option>
+			     <option value="" selected> </option>
 
 			     @foreach($programas as $programa)
 
@@ -47,7 +47,7 @@
 		
 		</div>
 			
-	@include('includes.subutton')
+		@include('includes.subutton')
 
 	</form>
 

@@ -36,12 +36,12 @@
 		 
 		 <div class="form-group col-sm-4">
 		   <label class="control-label text-left mar10">Poblaci&#xF3;n:</label>
-			<input type="text" class="form-control" pattern=".{0,222}" maxlength="222" name="pobla" value="{!! old('username') !!}">
+			<input type="text" class="form-control" pattern=".{0,166}" maxlength="166" name="pobla" value="{!! old('username') !!}">
 		 </div>  
 		 
 		 <div class="form-group col-sm-4">
 		   <label class="control-label text-left mar10">Direcci&#xF3;n:</label>
-			<input type="text" class="form-control" pattern=".{0,222}" maxlength="222" name="direc" value="{!! old('direc') !!}">
+			<input type="text" class="form-control" pattern=".{0,166}" maxlength="166" name="direc" value="{!! old('direc') !!}">
 		 </div>
 		 
 		 <div class="form-group col-sm-2">
@@ -84,7 +84,7 @@
 		 	
 		 <div class="form-group col-sm-4">
 		   <label class="control-label text-left mar10">F. nacimiento:</label>		 	
-	  		<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="fenac"> 
+	  		<input type="date" name="fenac" value="1970-01-01" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])"> 
 	  	 </div>
 			
 		 <div class="form-group col-sm-11">

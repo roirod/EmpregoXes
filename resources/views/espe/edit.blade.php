@@ -7,10 +7,9 @@
 @include('includes.messages')
 @include('includes.errors')
 
-<?php
- $texto = "Añadir Especialidad";
- addtexto($texto);
-?>
+
+{!! addtexto("Editar Especialidad") !!}
+
   
 <div class="row">
   <div class="col-sm-12">
@@ -24,7 +23,7 @@
 	    <div class="row">
 		    <div class="form-group col-sm-6">
 		      <label class="control-label text-left mar10">Nombre:</label>
-			   <input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="nomesp" value="{!!$especiali->nomesp!!}" required>
+			   <input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="nomesp" value="{!!$especiali->nomesp!!}" required>
 			</div>
 		</div>
 		 

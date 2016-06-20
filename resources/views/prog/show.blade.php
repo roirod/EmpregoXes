@@ -65,8 +65,7 @@
 <hr> <br> 
 
 
-<div class="row">
-  
+<div class="row">  
   <div class="col-sm-12">
 	  <div class="input-group">
 		   <span class="input-group-btn pad4"> <p> Especialidades, acciones:</p> </span>
@@ -79,77 +78,81 @@
 		   </div>
 	  </div>
   </div>
+ </div>
 
-  <div class="col-sm-12 mar10">
 
-			<div class="panel panel-default">
-				<div class="box260">
-			   	<table class="table table-hover">
-		       	  		
-						 @foreach ($especiprog as $esprog)
+ <div class="row"> 
+  <div class="col-sm-12">
 
-								<tr>
-									  <td class="wid230">{!!$esprog->nomesp!!}</td>
-									  						
-									  <td class="wid50">
+		<div class="panel panel-default">
+			<div class="box260">
+		   	<table class="table table-hover">
+       	  		
+				 @foreach ($especiprog as $esprog)
 
-									    <form role="form" id="form" class="form" action="{!!url("/Especiprog/$esprog->idesprog")!!}" method="POST">
-										    <input type="hidden" name="_method" value="DELETE">
-										    
-										    {!! csrf_field() !!}
+						<tr>
+							  <td class="wid230">{!!$esprog->nomesp!!}</td>
+							  						
+							  <td class="wid50">
 
-												 <div class="btn-group">
-												   <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" title="Eliminar">
-												     <i class="fa fa-times"></i>
-												     <span class="caret"></span>
-												   </button>
-												   <ul class="dropdown-menu" role="menu">
-												     <li>
-													     <button type="submit" class="btn btn-xs btn-danger">
-													      	 <i class="fa fa-times"></i> Eliminar
-													     </button> 
-												     </li>
-												    </ul>
-												  </div>
-										  </form>
+							    <form role="form" id="form" class="form" action="{!!url("/Especiprog/$esprog->idesprog")!!}" method="POST">
+								    <input type="hidden" name="_method" value="DELETE">
+								    
+								    {!! csrf_field() !!}
 
-									   </td>
+										 <div class="btn-group">
+										   <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" title="Eliminar">
+										     <i class="fa fa-times"></i>
+										     <span class="caret"></span>
+										   </button>
+										   <ul class="dropdown-menu" role="menu">
+										     <li>
+											     <button type="submit" class="btn btn-xs btn-danger">
+											      	 <i class="fa fa-times"></i> Eliminar
+											     </button> 
+										     </li>
+										    </ul>
+										  </div>
+								</form>
 
-									   <td class="wid290"></td>
+							   </td>
 
-						   		</tr>	
-						
-						  @endforeach 
+							   <td class="wid290"></td>
 
-			     </table>
-			   </div>
-			 </div>
+				   		</tr>	
+				
+				  @endforeach 
+
+		     </table>
+		   </div>
+		 </div>
 
    </div>
-
 </div>
 
 
 <hr> <br>
 
-	
-<div class="row mar10">
- <div class="col-sm-12 pad4">
-	 <p> Integrantes del programa:</p>
+
+
+<div class="row">  
+  <div class="col-sm-12">
+	  <div class="input-group">
+		   <span class="input-group-btn pad4"> <p> Integrantes del programa:</p> </span>
+	  </div>
+  </div>
  </div>
-</div>
 
 <div class="row">
   <div class="col-sm-12">
 	 <div class="panel panel-default">
 	   <table class="table">
 	     <tr class="fonsi16 success">
-	       <td class="wid50"></td>
 	       <td class="wid230">Nombre</td>
 	       <td class="wid110">Especialidad</td>
-	       <td class="wid95">F. inicio</td>
-	       <td class="wid95">F. fin</td>
-	       <td class="wid110">Notas</td>
+	       <td class="wid70">F. inicio</td>
+	       <td class="wid70">F. fin</td>
+	       <td class="wid180">Notas</td>
 	     </tr>
 	   </table> 
 	 <div class="box260">
@@ -158,12 +161,6 @@
 		 @foreach ($programcli as $progcli)
 
 			<tr>
-				  <td class="wid50">
-				  	  <a class="btn btn-default btn-sm" type="button" href="{!!url("/Clientes/$progcli->idcli")!!}">
-					  	  <i class="fa fa-hand-pointer-o"></i>
-					  </a> 
-				  </td>
-
 				  <td class="wid230">
 						<a class="pad4" href="{!!url("/Clientes/$progcli->idcli")!!}" target="_blank">
 							{!!$progcli->apecli!!}, {!!$progcli->nomcli!!}
@@ -171,9 +168,9 @@
 				  </td>
 				  
 				  <td class="wid110">{!!$progcli->nomesp!!}</td>
-				  <td class="wid95">{!!date('d-m-Y', strtotime($progcli->feini) )!!}</td>
-				  <td class="wid95">{!!date('d-m-Y', strtotime($progcli->fefin) )!!}</td>
-				  <td class="wid110">{!!$progcli->notas!!}</td>
+				  <td class="wid70">{!!date('d-m-Y', strtotime($progcli->feini) )!!}</td>
+				  <td class="wid70">{!!date('d-m-Y', strtotime($progcli->fefin) )!!}</td>
+				  <td class="wid180">{!!$progcli->notas!!}</td>
 		   	</tr>	
 		
 		  @endforeach 

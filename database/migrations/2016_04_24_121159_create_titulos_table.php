@@ -16,6 +16,7 @@ class CreateTitulosTable extends Migration
             $table->increments('idtit');
             $table->char('nomtit',166);
             $table->timestamps();
+            $table->softDeletes();
             $table->unique('nomtit');
         });
     }

@@ -9,9 +9,10 @@
 @include('includes.messages')
 @include('includes.errors')
 
-<?php
- addtexto("Editar Programa");
-?>
+
+
+{!! addtexto("Editar Programa") !!}
+
   
 <div class="row">
   <div class="col-sm-12">
@@ -24,7 +25,7 @@
           
           <div class="form-group col-sm-5">
             <label class="control-label text-left mar10">Nombre:</label>
-      	   <input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="nomprog" value="{!!$programa->nomprog!!}" required>
+      	   <input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="nomprog" value="{!!$programa->nomprog!!}" required>
       	 </div>
       		 	
       	 <div class="form-group col-sm-4">
@@ -43,7 +44,7 @@
            </div>
          
       			
-      @include('includes.subutton')
+          @include('includes.subutton')
     
     </form>
   </div>

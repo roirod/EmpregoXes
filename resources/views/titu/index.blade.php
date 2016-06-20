@@ -73,7 +73,7 @@
 						   <ul class="dropdown-menu" role="menu">
 						     <li>
 							     <a  href="{!!url("/Titulos/$titulo->idtit/del")!!}" role="button" class="btn btn-sm btn-danger" title="Eliminar">
-							      	 <i class="fa fa-times"></i>
+							      	 <i class="fa fa-times"></i> Eliminar
 							     </a> 
 						     </li>
 						    </ul>

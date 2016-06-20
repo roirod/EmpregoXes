@@ -12,7 +12,7 @@ class CreateProgramclisTable extends Migration
             $table->increments('idprocli');
             $table->integer('idcli')->unsigned();
             $table->integer('idprog')->unsigned();
-            $table->integer('idesp')->unsigned()->nullable(); 
+            $table->integer('idesp')->unsigned(); 
             $table->date('feini');
             $table->date('fefin');
             $table->text('notas')->nullable();            

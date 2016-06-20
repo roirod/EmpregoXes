@@ -28,7 +28,11 @@ class ClientesController extends Controller
     {  	
     	$numpag = 100;
 
-    	$clientes = DB::table('clientes')->orderBy('apecli', 'ASC')->orderBy('nomcli', 'ASC')->paginate($numpag);
+    	$clientes = DB::table('clientes')
+                    ->whereNull('deleted_at')
+                    ->orderBy('apecli', 'ASC')
+                    ->orderBy('nomcli', 'ASC')
+                    ->paginate($numpag);
 	          
         return view('cli.index', [
             'clientes' => $clientes,
@@ -39,10 +43,28 @@ class ClientesController extends Controller
     public function ver(Request $request)
     {  	
     	$busca = $request->input('busca');
+        $busen = $request->input('busen');
    	
 	  	if ( isset($busca) ) {
-		  $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8"); 		  
-  		  $clientes = DB::table('clientes')->where('apecli','LIKE','%'.$busca.'%')->orderBy('apecli','ASC')->orderBy('nomcli','ASC')->get();
+
+            if ( $busen == 'apecli' ) {
+    		  $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8"); 		  
+      		  $clientes = DB::table('clientes')
+                            ->whereNull('deleted_at')
+                            ->where('apecli','LIKE','%'.$busca.'%')
+                            ->orderBy('apecli','ASC')
+                            ->orderBy('nomcli','ASC')
+                            ->get();
+
+            } elseif ($busen == 'dni') {
+                
+              $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8");        
+              $clientes = DB::table('clientes')
+                            ->whereNull('deleted_at')
+                            ->where('dni','LIKE','%'.$busca.'%')
+                            ->orderBy('dni','ASC')
+                            ->get();
+            }
   		} 
   		     
         return view('cli.ver', [
@@ -71,6 +93,7 @@ class ClientesController extends Controller
 			            ->join('titulos', 'titucli.idtit','=','titulos.idtit')
 			            ->select('titucli.*','titulos.nomtit')
 						->where('idcli',$idcli)
+                        ->whereNull('titulos.deleted_at')
 						->orderBy('nomtit', 'ASC')
 						->get();
 
@@ -79,6 +102,7 @@ class ClientesController extends Controller
 			            ->join('especiali', 'programcli.idesp','=','especiali.idesp')
 			            ->select('programcli.*','programas.nomprog','especiali.nomesp')
 						->where('idcli',$idcli)
+                        ->whereNull('programas.deleted_at')
 						->orderBy('feini', 'DESC')
 						->get();
 
@@ -86,6 +110,7 @@ class ClientesController extends Controller
 			            ->join('asuntos', 'regiscli.idasu', '=', 'asuntos.idasu')
 			            ->select('regiscli.*', 'asuntos.nomasu')
 						->where('idcli',$idcli)
+                        ->whereNull('asuntos.deleted_at')
 						->orderBy('fech', 'DESC')
 						->get();
 
@@ -357,13 +382,6 @@ class ClientesController extends Controller
 
 		$files = $request->file('files');
 
-        $size = $files->getClientSize();
-
-        if ($size > 1000000) {
-            $request->session()->flash('errmess', 'Tamaño de archivo superior a 4 mb, suba un archivo de menor tamaño.');
-            return redirect("Clientes/$idcli/file");
-        }
-
         if ($fotoper == 1) {
             $extension = $files->getClientOriginalExtension();
 
@@ -383,17 +401,36 @@ class ClientesController extends Controller
             }
 
         } else {
-  
-			$ficount = count($files);
-			$uploadcount = 0;
-			  
-			foreach($files as $file) {
-			  	$filename = $file->getClientOriginalName();
-			  	$file->move($clidir, $filename);
-		        $uploadcount ++;  
-		    }
+
+            $ficount = count($files);
+            $upcount = 0;
+
+            foreach ($files as $file) {                       
+                $filename = $file->getClientOriginalName();
+                $size = $file->getClientSize();
+
+                $max = 1024 * 1024 * 4;
+ 
+                $filedisk = storage_path("app/clidir/$idcli/$filename");
+
+                if ( $size > $max ) {
+                    $mess = "El archivo: - $filename - es superior a 4MB";
+                    $request->session()->flash('errmess', $mess);
+                    return redirect("Clientes/$idcli/file");
+                }                
+
+                if ( file_exists($filedisk) ) {
+                    $mess = "El archivo: $filename -- existe ya en su carpeta";
+                    $request->session()->flash('errmess', $mess);
+                    return redirect("Clientes/$idcli/file");
+
+                } else {
+                    $file->move($clidir, $filename);
+                    $upcount ++;
+                }
+            }
 		    
-		    if($uploadcount == $ficount){
+		    if($upcount == $ficount){
 		      return redirect("Clientes/$idcli/file");
 		    } else {
 		      $request->session()->flash('errmess', 'error!!!');
@@ -454,9 +491,7 @@ class ClientesController extends Controller
         
         $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8"); 
         
-        $clientes = clientes::find($idcli);
-      
-        $clientes->delete();
+        clientes::destroy($idcli);
 
         $request->session()->flash('sucmess', 'Hecho!!!');
         

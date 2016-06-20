@@ -26,19 +26,17 @@ class RegiscliController extends Controller
             return redirect('Clientes');
         }        
 
-        $cliente = DB::table('clientes')->where('idcli', $idcli)->first();
-
         $asunto = DB::table('asuntos')->orderBy('nomasu', 'ASC')->get();
 
-        return view('regis.create', ['request' => $request,
-                                     'idcli' => $idcli,
-                                     'cliente' => $cliente,
-                                     'asunto' => $asunto]);  
+        return view('regis.create', [
+            'request' => $request,
+            'idcli' => $idcli,
+            'asunto' => $asunto
+        ]);  
     }
 
     public function store(Request $request)
     {
-
         $idcli = $request->input('idcli');
 
         if ( empty($idcli) ) {
@@ -46,10 +44,11 @@ class RegiscliController extends Controller
         }     
 
         $validator = Validator::make($request->all(),[
-                'idcli' => 'required',
-                'idasu' => 'required',
-                'fech' => 'required|date',
-                'notas' => '']);
+            'idcli' => 'required',
+            'idasu' => 'required',
+            'fech' => 'required|date',
+            'notas' => ''
+        ]);
                        
         if ($validator->fails()) {
              return redirect("Regiscli/$idcli/create")
@@ -65,10 +64,11 @@ class RegiscliController extends Controller
             $notas = htmlentities (trim($notas),ENT_QUOTES,"UTF-8");
                             
             regiscli::create([
-                  'idcli' => $idcli,
-                  'idasu' => $idasu,
-                  'fech' => $fech,
-                  'notas' => $notas]);
+                'idcli' => $idcli,
+                'idasu' => $idasu,
+                'fech' => $fech,
+                'notas' => $notas
+            ]);
               
             $request->session()->flash('sucmess', 'Hecho!!!');  
                             
@@ -76,48 +76,124 @@ class RegiscliController extends Controller
         }      
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
+    { }
+
+    public function edit(Request $request,$idcli,$idregcli)
     {
-        //
+        if ( null === $idcli ) {
+            return redirect('Clientes');
+        }
+        
+        if ( null === $idregcli ) {
+            return redirect('Clientes');
+        }
+
+        $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8");
+        $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
+
+        $regiscli = DB::table('regiscli')
+                        ->join('asuntos', 'regiscli.idasu', '=', 'asuntos.idasu')
+                        ->select('regiscli.*', 'asuntos.nomasu')
+                        ->where('idregcli',$idregcli)
+                        ->whereNull('asuntos.deleted_at')
+                        ->first();        
+
+        return view('regis.edit', [
+            'request' => $request,
+            'regiscli' => $regiscli,
+            'idregcli' => $idregcli,
+            'idcli' => $idcli
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(Request $request,$idregcli)
     {
-        //
+        if ( null === $idregcli ) {
+            return redirect('Clientes');
+        }
+
+        $idregcli = htmlentities(trim($idregcli),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities(trim($request->input('idcli')),ENT_QUOTES,"UTF-8");
+
+        if ( null === $idcli ) {
+            return redirect('Clientes');
+        }
+
+        $validator = Validator::make($request->all(),[
+            'idcli' => 'required',
+            'fech' => 'required|date',
+            'notas' => ''
+        ]);
+                       
+        if ($validator->fails()) {
+            return redirect("/Regiscli/$idcli/$idregcli/edit")
+                         ->withErrors($validator)
+                         ->withInput();
+        } else {
+            
+            $notas = ucfirst($request->input('notas'));
+
+            $fech = htmlentities(trim($request->input('fech')),ENT_QUOTES,"UTF-8");
+            $notas = htmlentities(trim($notas),ENT_QUOTES,"UTF-8");
+                               
+            $regiscli = regiscli::find($idregcli);
+            
+            $regiscli->fech = $fech;
+            $regiscli->notas = $notas;
+
+            $regiscli->save();
+
+            $request->session()->flash('sucmess', 'Hecho!!!');
+
+            return redirect("Clientes/$idcli");
+        }   
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    public function del(Request $request,$idpac,$idregcli)
+    {         
+        $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
+        $idpac = htmlentities (trim($idpac),ENT_QUOTES,"UTF-8");
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if ( null === $idregcli ) {
+            return redirect('Clientes');
+        }
+
+        if ( null === $idpac ) {
+            return redirect('Clientes');
+        }
+
+        $cita = citas::find($idregcli);
+
+        return view('cit.del', [
+            'request' => $request,
+            'cita' => $cita,
+            'idregcli' => $idregcli,
+            'idpac' => $idpac
+        ]);
+    }
+ 
+    public function destroy(Request $request,$idregcli)
+    {               
+        $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
+        $idpac = htmlentities(trim($request->input('idpac')),ENT_QUOTES,"UTF-8");
+
+        if ( null === $idregcli ) {
+            return redirect('Clientes');
+        }
+
+        if ( null === $idpac ) {
+            return redirect('Clientes');
+        } 
+        
+        $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
+        
+        $cita = citas::find($idregcli);
+      
+        $cita->delete();
+
+        $request->session()->flash('sucmess', 'Hecho!!!');
+        
+        return redirect("Clientes/$idpac");
     }
 }

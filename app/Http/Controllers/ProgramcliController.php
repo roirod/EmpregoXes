@@ -125,22 +125,37 @@ class ProgramcliController extends Controller
     }
 
     public function show($id)
+    { }
+    
+    public function edit(Request $request,$idcli,$idprocli)
     {
-        //
-    }
+        if ( null === $idcli ) {
+            return redirect('Pacientes');
+        }
+        
+        if ( null === $idprocli ) {
+            return redirect('Pacientes');
+        }
 
-    public function edit($id)
-    {
-        //
-    }
+        $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8");
+        $idprocli = htmlentities (trim($idprocli),ENT_QUOTES,"UTF-8");
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        $tratampa = DB::table('tratampacien')
+            ->join('servicios','tratampacien.idser','=','servicios.idser')
+            ->select('tratampacien.*','servicios.nomser')
+            ->where('idtra', $idtra)
+            ->first();
+
+        $personal = DB::table('personal')->get();
+
+        return view('trat.edit', [
+            'request' => $request,
+            'tratampa' => $tratampa,
+            'personal' => $personal,
+            'idtra' => $idtra,
+            'idpac' => $idpac
+        ]);
+    }
     public function update(Request $request, $id)
     {
         //

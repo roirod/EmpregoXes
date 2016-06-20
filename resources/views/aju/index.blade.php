@@ -12,7 +12,7 @@
 	      <span class="input-group-btn pad4"> <p> Usuario:</p> </span>	
 	      <div class="btn-toolbar pad4" role="toolbar">
 	        <div class="btn-group">
-	          <a href="{!! url('/Usuarios/create') !!}" role="button" class="btn btn-sm btn-primary"> <i class="fa fa-plus"></i> Nuevo</a>
+	          <a href="{!! url('/Usuarios/create') !!}" role="button" class="btn btn-sm btn-primary"> Ver</a>
 	        </div> 
 	        <div class="btn-group">
 	          <a href="{!! url('/Usuarios/usuedit') !!}" role="button" class="btn btn-sm btn-success"> <i class="fa fa-edit"></i> Editar</a>

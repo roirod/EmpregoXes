@@ -4,7 +4,7 @@
   	<div class="col-sm-7">
     <div class="alert alert-success">    
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	      <p class="lead pad4"> {!! session('sucmess') !!} </p>
+	      <p class="pad4"> {!! session('sucmess') !!} </p>
 	 </div> 
    </div>
   </div>
@@ -15,7 +15,7 @@
   	<div class="col-sm-7">
     <div class="alert alert-danger">    
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	      <p class="lead pad10"> {!! session('errmess') !!} </p>  
+	      <p class="pad4"> {!! session('errmess') !!} </p>  
 	 </div>
    </div>
   </div>

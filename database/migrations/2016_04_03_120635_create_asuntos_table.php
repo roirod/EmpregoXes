@@ -16,6 +16,7 @@ class CreateAsuntosTable extends Migration
             $table->increments('idasu');
             $table->char('nomasu', 166);
             $table->timestamps();
+            $table->softDeletes();
             $table->unique('nomasu');            
         });
     }

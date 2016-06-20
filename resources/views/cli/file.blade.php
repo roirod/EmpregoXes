@@ -10,14 +10,24 @@
 @include('includes.errors')
 
 
-<div class="row pad10">
-  <form class="dropzone" id="dropzone" action="{!!url('/Clientes/upload')!!}" method="post" enctype="multipart/form-data">
+ <div class="row pad10">
+  <form role="form" action="{!!url('/Clientes/upload')!!}" method="post" enctype="multipart/form-data">
       {!! csrf_field() !!}
 
-      <input type="hidden" name="idcli" value="{!!$idcli!!}">
+       <input type="hidden" name="idcli" value="{!!$idcli!!}">
   
-      <input type="hidden" type="file" name="files" />
-
+      <div class="input-group">
+        <span class="input-group-btn pad4"> 
+          <p>&nbsp;&nbsp; Subir Archivos: &nbsp;&nbsp;</p> 
+        </span> 
+        <span class="input-group-btn"> 
+          <input type="file" class="btn btn-default" name="files[]" multiple required />
+        </span> 
+        &nbsp;&nbsp;&nbsp;
+        <span class="pad10"> 
+          <button type="submit" class="btn btn-info">&nbsp;<i class="fa fa-upload"></i>&nbsp;</button>
+        </span>
+      </div>
   </form>
 </div>
 
@@ -74,11 +84,3 @@
 	 
 @endsection
 
-@section('js')
-    @parent
-
-      <link href="{!! asset('assets/css/dropzone.css') !!}" rel="stylesheet" type="text/css" >
-
-      <script type="text/javascript" src="{!! asset('assets/js/dropzone.js') !!}"></script>
-
-@endsection

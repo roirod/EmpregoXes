@@ -19,11 +19,12 @@ class CreateClientesTable extends Migration
             $table->string('tel2', 18)->nullable();
             $table->string('tel3', 18)->nullable();
             $table->string('sexo', 9)->nullable();
-            $table->string('direc', 222)->nullable();
-            $table->string('pobla', 222)->nullable();
-            $table->date('fenac')->default('1950-01-01')->nullable();
+            $table->string('direc', 166)->nullable();
+            $table->string('pobla', 166)->nullable();
+            $table->date('fenac')->default('1970-01-01')->nullable();
             $table->text('notas')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->index('apecli');
             $table->index('nomcli');
             $table->unique('dni');

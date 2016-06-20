@@ -21,7 +21,7 @@ class ProgramasController extends Controller
     {  	
     	$numpag = 30;
 
-    	$programas = DB::table('programas')->orderBy('nomprog', 'DESC')->paginate($numpag);
+    	$programas = DB::table('programas')->whereNull('deleted_at')->orderBy('nomprog', 'DESC')->paginate($numpag);
 	          
         return view('prog.index', [
 			'programas' => $programas,
@@ -35,7 +35,7 @@ class ProgramasController extends Controller
    	
 	  	if ( isset($busca) ) {
 		  $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8"); 		  
-  		  $programas = DB::table('programas')->where('nomprog','LIKE','%'.$busca.'%')->orderBy('nomprog','DESC')->get();
+  		  $programas = DB::table('programas')->where('nomprog','LIKE','%'.$busca.'%')->whereNull('deleted_at')->orderBy('nomprog','DESC')->get();
   		} 
   		     
         return view('prog.ver', [
@@ -66,7 +66,8 @@ class ProgramasController extends Controller
             ->join('clientes', 'programcli.idcli','=','clientes.idcli')
             ->join('especiali', 'programcli.idesp','=','especiali.idesp')
             ->select('programcli.*', 'clientes.apecli', 'clientes.nomcli', 'especiali.nomesp')
-            ->where('idprog',$idprog)
+            ->where('programcli.idprog',$idprog)
+            ->whereNull('clientes.deleted_at')
             ->orderBy('feini', 'ASC')
             ->get();										 													
 	    	          
@@ -86,14 +87,18 @@ class ProgramasController extends Controller
 
     public function store(Request $request)
     {
-        $nomprog = htmlentities (trim($request->input('nomprog')),ENT_QUOTES,"UTF-8");
+        $nomprog = ucfirst($request->input('nomprog'));
+        $nomprog = htmlentities (trim($nomprog),ENT_QUOTES,"UTF-8");         
 
         $programas = programas::all();
 
         foreach ($programas as $program) {
             if($program->nomprog == $nomprog) {
-                $request->session()->flash('errmess', "Repetido. El nombre -- $nomprog -- ya está en uso.");
-                return redirect('Programas/create');
+                $messa = 'Repetido: '.$nomprog.', ya existe.';
+
+                $request->session()->flash('errmess', $messa);
+
+                return redirect('Programas/create')->withInput();
             }
         }
 
@@ -110,8 +115,8 @@ class ProgramasController extends Controller
 	                     ->withInput();
 	     } else {
         	
-        	$nomprog = ucfirst(strtolower( $request->input('nomprog') ) );
-        	$notas = ucfirst(strtolower( $request->input('notas') ) );
+        	$nomprog = ucfirst($request->input('nomprog'));
+        	$notas = ucfirst($request->input('notas'));
         	
 			$nomprog = htmlentities (trim($nomprog),ENT_QUOTES,"UTF-8");
 			$feini = htmlentities (trim($request->input('feini')),ENT_QUOTES,"UTF-8");
@@ -156,21 +161,19 @@ class ProgramasController extends Controller
         }
 
         $idprog = htmlentities(trim($idprog),ENT_QUOTES,"UTF-8");
-        $nomprog = htmlentities(trim($request->input('nomprog')),ENT_QUOTES,"UTF-8");
+
+        $nomprog = ucfirst($request->input('nomprog'));
+        $nomprog = htmlentities (trim($nomprog),ENT_QUOTES,"UTF-8");         
 
         $programas = programas::all();
 
-        $progra = programas::find($idprog);
+        foreach ($programas as $program) {
+            if($program->nomprog == $nomprog) {
+                $messa = 'Repetido: '.$nomprog.', ya existe.';
 
-        if($progra->nomprog == $nomprog) {
+                $request->session()->flash('errmess', $messa);
 
-        } else {
-            
-            foreach ($programas as $program) {
-                if($program->nomprog == $nomprog) {
-                    $request->session()->flash('errmess', "Repetido. El nombre -- $nomprog -- ya está en uso.");
-                    return redirect("Programas/$idprog/edit");
-                }
+                return redirect("Programas/$idprog/edit")->withInput();
             }
         }
 
@@ -187,12 +190,10 @@ class ProgramasController extends Controller
                          ->withInput();
         } else {
     		
-    		$idprog = htmlentities (trim($idprog),ENT_QUOTES,"UTF-8");
-    		
     		$programas = programas::find($idprog);
     		  		
-        	$nomprog = ucfirst(strtolower( $request->input('nomprog') ) );
-        	$notas = ucfirst(strtolower( $request->input('notas') ) );
+        	$nomprog = ucfirst($request->input('nomprog'));
+        	$notas = ucfirst($request->input('notas'));
         	
 			$programas->nomprog = htmlentities (trim($nomprog),ENT_QUOTES,"UTF-8");
 			$programas->feini = htmlentities (trim($request->input('feini')),ENT_QUOTES,"UTF-8");
@@ -200,10 +201,10 @@ class ProgramasController extends Controller
             $programas->notas = htmlentities (trim($notas),ENT_QUOTES,"UTF-8");
 			
 			$programas->save();
-      
-	      $request->session()->flash('sucmess', 'Hecho!!!');
-	        	
-	      return redirect('Programas');
+
+            $request->session()->flash('sucmess', 'Hecho!!!');
+
+            return redirect('Programas');
 	    }   
     }
     
@@ -228,11 +229,9 @@ class ProgramasController extends Controller
         }      
         
         $idprog = htmlentities (trim($idprog),ENT_QUOTES,"UTF-8");
-        
-        $programas = programas::find($idprog);
-      
-        $programas->delete();
-        
+
+        programas::destroy($idprog);
+                
         return redirect('Programas');
     }
 }

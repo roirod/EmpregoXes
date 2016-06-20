@@ -36,10 +36,10 @@ class UsuariosController extends Controller
 
     public function store(Request $request)
     {
-    	  $users = DB::table('users')->get();
+    	$users = DB::table('users')->get();
     	  
-    	  $passwd = trim( $request->input('passwd') );
-    	  $uname = htmlentities (trim($request->input('uname')),ENT_QUOTES,"UTF-8");
+    	$passwd = trim( $request->input('passwd') );
+    	$uname = htmlentities (trim($request->input('uname')),ENT_QUOTES,"UTF-8");
         $tipo = htmlentities (trim($request->input('tipo')),ENT_QUOTES,"UTF-8");
     	  
     	  foreach ($users as $user) {
@@ -50,8 +50,8 @@ class UsuariosController extends Controller
     	  }	 
     	 	
         $validator = Validator::make($request->all(),[
-        		'uname' => 'required|max:44',
-	         'passwd' => 'required|max:44',
+        	'uname' => 'required|max:44',
+	        'passwd' => 'required|max:44',
             'tipo' => 'required|max:44'
 	     ]);
             
@@ -61,43 +61,38 @@ class UsuariosController extends Controller
 	                     ->withInput();
 	     } else {
 	     		
-		    	if ( $uname == 'admin' ) {
-		    		$request->session()->flash('errmess', 'Nombre de usuario no permitido, use cualquier otro.');	
-		    	  	return redirect('Usuarios/create');
-		    	}	     		
+		    if ( $uname == 'admin' ) {
+		    	$request->session()->flash('errmess', 'Nombre de usuario no permitido, use cualquier otro.');	
+		    	return redirect('Usuarios/create');
+		    }	     		
 	        	     	        	
-		      User::create([
-		          'username' => $uname,
-		          'password' => bcrypt($passwd),
+		    User::create([
+		        'username' => $uname,
+		        'password' => bcrypt($passwd),
                 'tipo' => $tipo
             ]);
 		      
-		      $request->session()->flash('sucmess', 'Hecho!!!');	
+		    $request->session()->flash('sucmess', 'Hecho!!!');	
 	        	        	
-	        	return redirect('Usuarios/create');
+	        return redirect('Usuarios/create');
         }      
-    }
-    
-    public function usuedit(Request $request)
-    {
-		   $users = DB::table('users')->get();
-
-		   return view('user.usuedit', [
-            'request' => $request,
-            'users' => $users
-         ]);  
     }
 
     public function show($id)
-    {
-        //
-    }
+    { }
 
     public function edit($id)
+    { }
+
+    public function usuedit(Request $request)
     {
-        //
-    }
-    
+        $users = DB::table('users')->get();
+
+        return view('user.usuedit', [
+            'request' => $request,
+            'users' => $users
+        ]);  
+    }  
     
     public function saveup(Request $request)
     {	  
@@ -115,13 +110,36 @@ class UsuariosController extends Controller
 		  return redirect('/Config');
     }
 
-    public function update(Request $request, $id)
+    public function usudel(Request $request)
     {
-        //
+        $users = DB::table('users')->get();
+
+        return view('user.usudel', [
+            'request' => $request,
+            'users' => $users
+        ]);
+    }  
+
+    public function delete(Request $request)
+    {
+        $uid = htmlentities (trim($request->input('uid')),ENT_QUOTES,"UTF-8");
+
+        if ( null === $uid ) {
+            return redirect('Ajustes');
+        }  
+        
+        $User = User::find($uid);
+      
+        $User->delete();
+
+        $request->session()->flash('sucmess', 'Hecho!!!');
+        
+        return redirect('Ajustes');
     }
 
+    public function update(Request $request, $id)
+    { }
+
     public function destroy($id)
-    {
-        //
-    }
+    { }
 }

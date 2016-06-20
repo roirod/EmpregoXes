@@ -7,38 +7,37 @@
 @include('includes.messages')
 @include('includes.errors')
 
-<?php
- $texto = "Añadir Programa";
- addtexto($texto);
-?>
+
+{!! addtexto("Añadir Programa") !!}
+
   
 <div class="row">
   <div class="col-sm-12">
     <form role="form" id="form" class="form" action="{!! url('/Programas') !!}" method="post">
-    {!! csrf_field() !!}
-    
-    <div class="form-group col-sm-5">
-      <label class="control-label text-left mar10">Nombre:</label>
-	   <input type="text" class="form-control" pattern=".{1,222}" maxlength="222" name="nomprog" value="{!! old('nomprog') !!}" required>
-	 </div>
-		 	
-	 <div class="form-group col-sm-4">
-	   <label class="control-label text-left mar10">Fecha inicio:</label>		 	
-  		<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="feini" value="{!!old('feini')!!}" required > 
-  	 </div>
-  	 
-  	 <div class="form-group col-sm-4">
-	   <div><label class="control-label text-left mar10">Fecha fin:</label>	</div>	 	
-  		<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="fefin" value="{!!old('fefin')!!}" required > 
-  	 </div>
+        {!! csrf_field() !!}
+        
+        <div class="form-group col-sm-5">
+          <label class="control-label text-left mar10">Nombre:</label>
+    	   <input type="text" class="form-control" pattern=".{1,166}" maxlength="166" name="nomprog" value="{!! old('nomprog') !!}" required>
+    	 </div>
+    		 	
+    	 <div class="form-group col-sm-4">
+    	   <label class="control-label text-left mar10">Fecha inicio:</label>		 	
+      		<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="feini" value="{!!old('feini')!!}" required > 
+      	 </div>
+      	 
+      	 <div class="form-group col-sm-4">
+    	   <div><label class="control-label text-left mar10">Fecha fin:</label>	</div>	 	
+      		<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="fefin" value="{!!old('fefin')!!}" required > 
+      	 </div>
 
-     <div class="form-group col-sm-11">
-       <label class="control-label text-left mar10">Notas:</label>
-      <textarea class="form-control" name="notas" rows="4">{!! old('notas') !!}</textarea>
-     </div>
-   
-			
-@include('includes.subutton')
+         <div class="form-group col-sm-11">
+           <label class="control-label text-left mar10">Notas:</label>
+          <textarea class="form-control" name="notas" rows="4">{!! old('notas') !!}</textarea>
+         </div>
+       
+    			
+        @include('includes.subutton')
     
     </form>
   </div>

@@ -60,7 +60,7 @@
 <div class="row mar10 fonsi16">
 
 		<div class="col-sm-2 pad4 max150">
-			<img src="{!! $fotoper !!}">
+			<img src="{!! $fotoper !!}?{!! time() !!}">
 		</div> 
 
 	  <div class="col-sm-6 pad4"> 
@@ -244,8 +244,8 @@
 				  <td class="wid180">{!!$progcli->notas!!}</td>
 				  
 				  <td class="wid50">
-			           <a  href="{!!url("/Programcli/$progcli->idprocli/edit")!!}" role="button" class="btn btn-xs btn-success" title="Editar">
-			           	 <i class="fa fa-edit"></i>
+			           <a  href="{!!url("/Programcli/$idcli/$progcli->idprocli/edit")!!}" role="button" class="btn btn-xs btn-success" title="Editar">
+			           	 <i class="fa fa-edit"></i> 
 			           </a> 
 				  </td>
 				
@@ -257,8 +257,8 @@
 					   </button>
 					   <ul class="dropdown-menu" role="menu">
 					     <li>
-						     <a  href="{!!url("/Programcli/$progcli->idprocli/del")!!}" role="button" class="btn btn-xs btn-danger" title="Eliminar">
-						      	 <i class="fa fa-times"></i>
+						     <a  href="{!!url("/Programcli/$idcli/$progcli->idprocli/del")!!}" role="button" class="btn btn-xs btn-danger" title="Eliminar">
+						      	 <i class="fa fa-times"></i> Eliminar
 						     </a> 
 					     </li>
 					    </ul>
@@ -312,21 +312,21 @@
 		  <td class="wid230">{!!$regcli->notas!!}</td>
 
 		  <td class="wid50">
-		    <a role="button" href="{!!url("Regiscli/$regcli->idregcli/edit")!!}" class="btn btn-xs btn-success">	
-		     	<i class="fa fa-edit"></i>
+		    <a role="button" href="{!!url("Regiscli/$idcli/$regcli->idregcli/edit")!!}" class="btn btn-xs btn-success" title="Editar">	
+		     	<i class="fa fa-edit"></i> 
 			</a>
 		  </td>
 		
 		  <td class="wid50">
 			 <div class="btn-group">
-			   <button type="button" class="btn btn-xs btn-danger btn-md dropdown-toggle" data-toggle="dropdown">
+			   <button type="button" class="btn btn-xs btn-danger btn-md dropdown-toggle" data-toggle="dropdown" title="Eliminar">
 			     <i class="fa fa-times"></i>
 			     <span class="caret"></span>
 			   </button>
 			   <ul class="dropdown-menu" role="menu">
 			     <li>
-			     	<a role="button" href="{!!url("Regiscli/$regcli->idregcli/del")!!}">	
-	     				<i class="fa fa-times"></i>
+			     	<a role="button" class="btn btn-xs btn-danger" href="{!!url("Regiscli/$idcli/$regcli->idregcli/del")!!}">	
+	     				<i class="fa fa-times"></i> Eliminar
 	     			</a>
 			     </li>
 			    </ul>

@@ -20,7 +20,7 @@ class TitulosController extends Controller
     {   
         $numpag = 50;
 
-        $titulos = DB::table('titulos')->orderBy('nomtit', 'ASC')->paginate($numpag);
+        $titulos = DB::table('titulos')->whereNull('deleted_at')->orderBy('nomtit', 'ASC')->paginate($numpag);
               
         return view('titu.index', [
             'titulos' => $titulos,
@@ -34,7 +34,7 @@ class TitulosController extends Controller
     
         if ( isset($busca) ) {
           $busca = htmlentities (trim($busca),ENT_QUOTES,"UTF-8");     
-          $titulos = DB::table('titulos')->where('nomtit','LIKE','%'.$busca.'%')->orderBy('nomtit','ASC')->get();
+          $titulos = DB::table('titulos')->where('nomtit','LIKE','%'.$busca.'%')->whereNull('deleted_at')->orderBy('nomtit','ASC')->get();
         } 
                           
         return view('titu.ver', [
@@ -45,29 +45,43 @@ class TitulosController extends Controller
     }    
    
     public function show(Request $request,$idtit)
-    {                       
-    }
+    { }
 
     public function create(Request $request)
     {
-          return view('titu.create', ['request' => $request]);  
+        return view('titu.create', [
+            'request' => $request
+        ]);  
     }
 
     public function store(Request $request)
     {
+        $nomtit = ucfirst($request->input('nomtit'));
+        $nomtit = htmlentities (trim($nomtit),ENT_QUOTES,"UTF-8"); 
+
+        $titulos = titulos::all();
+
+        foreach ($titulos as $titu) {
+            if($titu->nomtit == $nomtit) {
+                $messa = 'Repetido: '.$nomtit.', ya existe.';
+
+                $request->session()->flash('errmess', $messa);
+
+                return redirect('Titulos/create')->withInput();
+            }
+        }
+
         $validator = Validator::make($request->all(),[
-            'nomtit' => 'required|unique:titulos|max:222'
+            'nomtit' => 'required|unique:titulos|max:166'
         ]);
-                       
+
         if ($validator->fails()) {
-             return redirect('Titulos/create')
-                         ->withErrors($validator)
+            $messa = 'Repetido: '.$nomtit.', ya existe.';
+            $request->session()->flash('errmess', $messa);
+
+            return redirect("Titulos/create")
                          ->withInput();
-         } else {
-            
-            $nomtit = ucfirst(strtolower( $request->input('nomtit') ) );
-                
-            $nomtit = htmlentities (trim($nomtit),ENT_QUOTES,"UTF-8");
+        } else { 
                             
             titulos::create([
                 'nomtit' => $nomtit
@@ -94,18 +108,35 @@ class TitulosController extends Controller
  
     public function update(Request $request,$idtit)
     {
-        $validator = Validator::make($request->all(),[
-            'nomtit' => 'required|unique:titulos|max:222'
-        ]);
-                      
-        if ($validator->fails()) {
-             return redirect("Titulos/$idtit/edit")
-                         ->withErrors($validator)
-                         ->withInput();
-        } else {
+        $nomtit = ucfirst($request->input('nomtit'));
+        $nomtit = htmlentities (trim($nomtit),ENT_QUOTES,"UTF-8");  
 
-            $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8"); 
-            
+        $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8"); 
+
+        $titulos = titulos::all();
+
+        foreach ($titulos as $titu) {
+            if($titu->nomtit == $nomtit) {
+                $messa = 'Repetido: '.$nomtit.', ya existe.';
+
+                $request->session()->flash('errmess', $messa);
+
+                return redirect("Titulos/$idtit/edit")->withInput();
+            }
+        }
+
+        $validator = Validator::make($request->all(),[
+            'nomtit' => 'required|unique:titulos|max:166'
+        ]);
+
+        if ($validator->fails()) {
+            $messa = 'Repetido: '.$nomtit.', ya existe.';
+            $request->session()->flash('errmess', $messa);
+
+            return redirect("Titulos/$idtit/edit")
+                         ->withInput();
+        } else {         
+                                
             $titulos = titulos::find($idtit);
                     
             $nomtit = ucfirst(strtolower( $request->input('nomtit') ) );
@@ -122,18 +153,26 @@ class TitulosController extends Controller
     
     public function del(Request $request,$idtit)
     {      
-        $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8"); 
+        if ( empty($idtit) ) {
+            return redirect('Clientes');
+        }
 
-        return view('titu.del', ['request' => $request]);
+        $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8");
+
+        $titulo = titulos::find($idtit);
+
+        return view('titu.del', [
+            'request' => $request,
+            'titulo' => $titulo,
+            'idtit' => $idtit
+        ]);
     }
  
     public function destroy(Request $request,$idtit)
     {      
-        $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8");     
-        
-        $titulos = titulos::find($idtit);
-      
-        $titulos->delete();
+        $idtit = htmlentities (trim($idtit),ENT_QUOTES,"UTF-8");  
+
+        titulos::destroy($idtit);  
         
         return redirect('Titulos');
     }
