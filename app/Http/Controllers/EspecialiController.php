@@ -174,7 +174,7 @@ class EspecialiController extends Controller
         return view('espe.del', [
             'request' => $request,
             'especiali' => $especiali,
-            '$idesp' => $idesp
+            'idesp' => $idesp
         ]);
     }
  

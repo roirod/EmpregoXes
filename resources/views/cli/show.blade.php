@@ -220,8 +220,9 @@
 	   <table class="table">
 	     <tr class="fonsi16 success">
 	       <td class="wid180">Programa</td>
-	       <td class="wid95">F. inicio</td>
-	       <td class="wid95">F. fin</td>
+	       <td class="wid110">Especialidad</td>
+	       <td class="wid70">F. inicio</td>
+	       <td class="wid70">F. fin</td>
 	       <td class="wid180">Notas</td>
 	       <td class="wid50"></td>
 	       <td class="wid50"></td>
@@ -239,8 +240,10 @@
 					 	</a>
 				  </td>
 
-				  <td class="wid95">{!!date('d-m-Y', strtotime($progcli->feini) )!!}</td>
-				  <td class="wid95">{!!date('d-m-Y', strtotime($progcli->fefin) )!!}</td>
+				  <td class="wid110">{!! $progcli->nomesp !!}</td>
+
+				  <td class="wid70">{!!date('d-m-Y', strtotime($progcli->feini) )!!}</td>
+				  <td class="wid70">{!!date('d-m-Y', strtotime($progcli->fefin) )!!}</td>
 				  <td class="wid180">{!!$progcli->notas!!}</td>
 				  
 				  <td class="wid50">

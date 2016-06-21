@@ -150,50 +150,55 @@ class RegiscliController extends Controller
         }   
     }
 
-    public function del(Request $request,$idpac,$idregcli)
+    public function del(Request $request,$idcli,$idregcli)
     {         
         $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
-        $idpac = htmlentities (trim($idpac),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8");
 
         if ( null === $idregcli ) {
             return redirect('Clientes');
         }
 
-        if ( null === $idpac ) {
+        if ( null === $idcli ) {
             return redirect('Clientes');
         }
 
-        $cita = citas::find($idregcli);
+        $regiscli = DB::table('regiscli')
+                        ->join('asuntos', 'regiscli.idasu', '=', 'asuntos.idasu')
+                        ->select('regiscli.*', 'asuntos.nomasu')
+                        ->where('idregcli',$idregcli)
+                        ->whereNull('asuntos.deleted_at')
+                        ->first(); 
 
-        return view('cit.del', [
+        return view('regis.del', [
             'request' => $request,
-            'cita' => $cita,
+            'regiscli' => $regiscli,
             'idregcli' => $idregcli,
-            'idpac' => $idpac
+            'idcli' => $idcli
         ]);
     }
  
     public function destroy(Request $request,$idregcli)
     {               
         $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
-        $idpac = htmlentities(trim($request->input('idpac')),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities(trim($request->input('idcli')),ENT_QUOTES,"UTF-8");
 
         if ( null === $idregcli ) {
             return redirect('Clientes');
         }
 
-        if ( null === $idpac ) {
+        if ( null === $idcli ) {
             return redirect('Clientes');
         } 
         
-        $idregcli = htmlentities (trim($idregcli),ENT_QUOTES,"UTF-8");
-        
-        $cita = citas::find($idregcli);
+        $idregcli = htmlentities(trim($idregcli),ENT_QUOTES,"UTF-8");
+
+        $regiscli = regiscli::find($idregcli);
       
-        $cita->delete();
+        $regiscli->delete();
 
         $request->session()->flash('sucmess', 'Hecho!!!');
         
-        return redirect("Clientes/$idpac");
+        return redirect("Clientes/$idcli");
     }
 }

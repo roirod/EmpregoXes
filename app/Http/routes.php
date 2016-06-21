@@ -64,7 +64,7 @@ Route::group(['middleware' => 'web'], function () {
 
 		Route::get('Programcli/{idcli}/{idprocli}/edit', 'ProgramcliController@edit');
 		Route::get('Programcli/{idcli}/{idprocli}/del', 'ProgramcliController@del');
-		Route::put('Programcli/{idprocli}', 'ProgramasController@update');
+		Route::put('Programcli/{idprocli}', 'ProgramcliController@update');
 		Route::delete('Programcli/{idprocli}', 'ProgramcliController@destroy');	
 
 		Route::get('Regiscli/{idpac}/{id}/edit', 'RegiscliController@edit');

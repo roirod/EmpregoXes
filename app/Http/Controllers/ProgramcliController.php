@@ -20,12 +20,10 @@ class ProgramcliController extends Controller
     }   
 
     public function index()
-    {
-    }
+    { }
 
     public function create()
-    {
-    }
+    { }
 
     public function crea(Request $request)
     {     
@@ -140,35 +138,116 @@ class ProgramcliController extends Controller
         $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8");
         $idprocli = htmlentities (trim($idprocli),ENT_QUOTES,"UTF-8");
 
-        $tratampa = DB::table('tratampacien')
-            ->join('servicios','tratampacien.idser','=','servicios.idser')
-            ->select('tratampacien.*','servicios.nomser')
-            ->where('idtra', $idtra)
-            ->first();
+        $programcli = DB::table('programcli')
+                        ->join('programas', 'programcli.idprog','=','programas.idprog')
+                        ->join('especiali', 'programcli.idesp','=','especiali.idesp')
+                        ->select('programcli.*','programas.nomprog','especiali.nomesp')
+                        ->where('programcli.idprocli',$idprocli)
+                        ->whereNull('programas.deleted_at')
+                        ->first();
 
-        $personal = DB::table('personal')->get();
-
-        return view('trat.edit', [
+        return view('progcli.edit', [
             'request' => $request,
-            'tratampa' => $tratampa,
-            'personal' => $personal,
-            'idtra' => $idtra,
-            'idpac' => $idpac
+            'programcli' => $programcli,
+            'idcli' => $idcli,
+            'idprocli' => $idprocli
         ]);
     }
-    public function update(Request $request, $id)
+
+    public function update(Request $request,$idprocli)
     {
-        //
+        if ( null === $idprocli ) {
+            return redirect('Clientes');
+        }
+
+        $idprocli = htmlentities(trim($idprocli),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities(trim($request->input('idcli')),ENT_QUOTES,"UTF-8");
+
+        if ( null === $idcli ) {
+            return redirect('Clientes');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'feini' => 'required|date',
+            'fefin' => 'required|date',
+            'notas' => ''
+        ]);
+                       
+        if ($validator->fails()) {
+            return redirect("/Programcli/$idcli/$idprocli/edit")
+                         ->withErrors($validator);
+        } else {
+            
+            $notas = ucfirst($request->input('notas'));
+
+            $feini = htmlentities(trim($request->input('feini')),ENT_QUOTES,"UTF-8");
+            $fefin = htmlentities(trim($request->input('fefin')),ENT_QUOTES,"UTF-8");
+            $notas = htmlentities(trim($notas),ENT_QUOTES,"UTF-8");
+                               
+            $programcli = programcli::find($idprocli);
+            
+            $programcli->feini = $feini;
+            $programcli->fefin = $fefin;
+            $programcli->notas = $notas;
+
+            $programcli->save();
+
+            $request->session()->flash('sucmess', 'Hecho!!!');
+
+            return redirect("Clientes/$idcli");
+        }   
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function del(Request $request,$idcli,$idprocli)
+    {         
+        $idprocli = htmlentities (trim($idprocli),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities (trim($idcli),ENT_QUOTES,"UTF-8");
+
+        if ( null === $idprocli ) {
+            return redirect('Clientes');
+        }
+
+        if ( null === $idcli ) {
+            return redirect('Clientes');
+        }
+
+        $programcli = DB::table('programcli')
+                        ->join('programas', 'programcli.idprog','=','programas.idprog')
+                        ->join('especiali', 'programcli.idesp','=','especiali.idesp')
+                        ->select('programcli.*','programas.nomprog','especiali.nomesp')
+                        ->where('programcli.idprocli',$idprocli)
+                        ->whereNull('programas.deleted_at')
+                        ->first();        
+
+        return view('progcli.del', [
+            'request' => $request,
+            'programcli' => $programcli,
+            'idprocli' => $idprocli,
+            'idcli' => $idcli
+        ]);
+    }
+ 
+    public function destroy(Request $request,$idprocli)
+    {               
+        $idprocli = htmlentities (trim($idprocli),ENT_QUOTES,"UTF-8");
+        $idcli = htmlentities(trim($request->input('idcli')),ENT_QUOTES,"UTF-8");
+
+        if ( null === $idprocli ) {
+            return redirect('Clientes');
+        }
+
+        if ( null === $idcli ) {
+            return redirect('Clientes');
+        } 
+        
+        $idprocli = htmlentities(trim($idprocli),ENT_QUOTES,"UTF-8");
+
+        $programcli = programcli::find($idprocli);
+      
+        $programcli->delete();
+
+        $request->session()->flash('sucmess', 'Hecho!!!');
+        
+        return redirect("Clientes/$idcli");
     }
 }
