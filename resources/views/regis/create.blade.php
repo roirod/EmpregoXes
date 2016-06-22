@@ -34,7 +34,7 @@
 		 	<div>
 		   		<label class="control-label text-left mar10">Fecha:</label>	
 		   	</div> 		 	
-	  			<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="fech" value="{!!old('fech')!!}" required > 
+	  			<input type="date" pattern="[0-9]{4}[- /](0[1-9]|1[012])[-/](0[1-9]|1[0-9]|2[0-9]|3[01])" name="fech" value="{!! old('fech') !!}" required > 
 	  	 </div>
 			
 		 <div class="form-group col-sm-11">

@@ -59,6 +59,7 @@ class ProgramasController extends Controller
             ->join('especiali', 'especiprog.idesp','=','especiali.idesp')
             ->select('especiprog.*','especiali.nomesp')
             ->where('idprog',$idprog)
+            ->whereNull('especiali.deleted_at')
             ->orderBy('nomesp', 'ASC')
             ->get();
 
@@ -216,8 +217,11 @@ class ProgramasController extends Controller
     	
         $idprog = htmlentities (trim($idprog),ENT_QUOTES,"UTF-8");
 
+        $programa = programas::find($idprog);
+
     	return view('prog.del', [
 			'request' => $request,
+            'programa' => $programa,
 			'idprog' => $idprog							   
 		]);
     }
