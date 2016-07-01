@@ -33,7 +33,14 @@ class ProgramcliController extends Controller
             return redirect('Clientes');
         }
         
-        $programas = DB::table('programas')->orderBy('nomprog', 'ASC')->get();
+        $programas = DB::table('programas')->whereNull('deleted_at')->orderBy('nomprog', 'ASC')->get();
+
+        $programcli = DB::table('programcli')
+                        ->where('idcli',$idcli)
+                        ->get();
+
+        $programcli = array_column($programcli, 'idprog');
+
         $clientes = clientes::find($idcli);
 
         $apecli = $clientes->apecli;
@@ -42,6 +49,7 @@ class ProgramcliController extends Controller
         return view('progcli.crea', [
             'request' => $request,
             'programas' => $programas,
+            'programcli' => $programcli,
             'idcli' => $idcli,
             'apecli' => $apecli,
             'nomcli' => $nomcli

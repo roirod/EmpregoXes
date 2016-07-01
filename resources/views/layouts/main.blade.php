@@ -3,7 +3,8 @@
 <head>
   @section('head')
     <meta charset="UTF-8">
-    <title>AroaDen</title>
+    <title>EmpregoXes</title>
+    
     <link href="{!! asset('assets/css/bootstrap.min.css') !!}" rel="stylesheet" type="text/css" >
     <link href="{!! asset('assets/css/Start.css') !!}" rel="stylesheet" type="text/css" >
     <link href="{!! asset('assets/font-awe/css/font-awesome.min.css') !!}" rel="stylesheet" type="text/css" >
@@ -19,6 +20,7 @@
    
    <div class="col-sm-1 wid180">
 	     <h3 class="pad10"> Emprego<small>Xes</small></h3>
+
 	     <nav class="navbar navbar-default" role="navigation">
 		       <ul class="nav nav-pills nav-stacked bgtra fonsi16"> 
 			         <li><a href="{!!url("/Buscador")!!}"> <i class="fa fa-search" aria-hidden="true"></i> Buscador</a></li>

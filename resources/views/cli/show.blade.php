@@ -44,7 +44,7 @@
   	      <p>&nbsp;&nbsp; Subir foto perfil: &nbsp;&nbsp;</p> 
   	    </span> 
   	    <span class="input-group-btn"> 
-  	      <input type="file" class="btn btn-default" name="files" />
+  	      <input type="file" class="btn btn-default" name="files" required />
   	    </span> 
   	    &nbsp;&nbsp;&nbsp;
   	    <span class="pad10"> 

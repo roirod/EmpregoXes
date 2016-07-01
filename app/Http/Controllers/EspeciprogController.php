@@ -35,10 +35,17 @@ class EspeciprogController extends Controller
 
         $especiali = DB::table('especiali')->orderBy('nomesp', 'ASC')->get();
 
+        $especiprog = DB::table('especiprog')
+                        ->where('idprog',$idprog)
+                        ->get();
+
+        $especiprog = array_column($especiprog, 'idesp');
+
         return view('esprog.create', [
             'request' => $request,
             'idprog' => $idprog,
             'especiali' => $especiali,
+            'especiprog' => $especiprog,
             'programa' => $programa
         ]);  
     }

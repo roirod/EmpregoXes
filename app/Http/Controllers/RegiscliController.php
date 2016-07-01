@@ -26,7 +26,7 @@ class RegiscliController extends Controller
             return redirect('Clientes');
         }        
 
-        $asunto = DB::table('asuntos')->orderBy('nomasu', 'ASC')->get();
+        $asunto = DB::table('asuntos')->whereNull('deleted_at')->orderBy('nomasu', 'ASC')->get();
 
         return view('regis.create', [
             'request' => $request,

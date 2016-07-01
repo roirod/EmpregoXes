@@ -35,14 +35,16 @@
 		   
 		   <select name="idprog" class="form-control" required>
 		   
-			     <option value="" selected> </option>
+				@foreach($programas as $item)
+					
+					@if(!in_array($item->idprog, $programcli))
 
-			     @foreach($programas as $programa)
+						<option value="{!!$item->idprog!!}"> {!! $item->nomprog !!} </option>
 
-					<option value="{!!$programa->idprog!!}"> {!!$programa->nomprog!!} </option>
-			 	 
-			 	 @endforeach	
-		   
+					@endif
+
+				@endforeach
+	   
 		   </select>
 		
 		</div>
@@ -57,7 +59,9 @@
 @endsection
 
 @section('js')
+
     @parent  
 	  <script type="text/javascript" src="{!! asset('assets/js/areyousure.js') !!}"></script>
 	  <script type="text/javascript" src="{!! asset('assets/js/guarda.js') !!}"></script>
+
 @endsection

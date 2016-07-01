@@ -33,12 +33,16 @@
 	      
 	      <select name="idesp" class="form-control" required>
 
-			@foreach($especiali as $especi)
+			@foreach($especiali as $item)
 
-				@continue($especi->nomesp == 'ninguna')
+				@continue($item->nomesp == 'ninguna')
+				
+				@if(!in_array($item->idesp, $especiprog))
 
-	      	  	<option value="{!!$especi->idesp!!}">{!!$especi->nomesp!!}</option>
-			
+					<option value="{!!$item->idesp!!}"> {!! $item->nomesp !!} </option>
+
+				@endif
+
 			@endforeach
 	      
 	      </select>

@@ -77,7 +77,6 @@
 					 	</a>
 					 </td>
 					 
-					 <td class="wid230">{!!$programa->nomprog!!}</td>
 					 <td class="wid95">{!!date ('d-m-Y', strtotime ($programa->feini) )!!}</td> 
 					 <td class="wid95">{!!date ('d-m-Y', strtotime ($programa->fefin) )!!}</td>
 					 <td class="wid230"></td>

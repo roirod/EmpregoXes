@@ -168,13 +168,17 @@ class ProgramasController extends Controller
 
         $programas = programas::all();
 
-        foreach ($programas as $program) {
-            if($program->nomprog == $nomprog) {
-                $messa = 'Repetido: '.$nomprog.', ya existe.';
+        $prog = programas::find($idprog);
 
-                $request->session()->flash('errmess', $messa);
+        if($prog->nomprog != $nomprog) {
+            foreach ($programas as $program) {
+                if($program->nomprog == $nomprog) {
+                    $messa = 'Repetido: '.$nomprog.', ya existe.';
 
-                return redirect("Programas/$idprog/edit")->withInput();
+                    $request->session()->flash('errmess', $messa);
+
+                    return redirect("Programas/$idprog/edit")->withInput();
+                }
             }
         }
 

@@ -28,14 +28,22 @@ class TitucliController extends Controller
             return redirect('Clientes');
         }        
 
-        $cliente = DB::table('clientes')->where('idcli', $idcli)->first();
+        $cliente = DB::table('clientes')->where('idcli', $idcli)->whereNull('deleted_at')->first();
 
-        $titulos = DB::table('titulos')->orderBy('nomtit', 'ASC')->get();
+        $titulos = DB::table('titulos')->whereNull('deleted_at')->orderBy('nomtit', 'ASC')->get();
 
-        return view('titucli.create', ['request' => $request,
-                                     'idcli' => $idcli,
-                                     'cliente' => $cliente,
-                                     'titulos' => $titulos]);  
+        $titucli = DB::table('titucli')->where('idcli', $idcli)->get();
+        
+        $titucli = array_column($titucli, 'idtit');
+
+
+        return view('titucli.create', [
+            'request' => $request,
+            'idcli' => $idcli,
+            'cliente' => $cliente,
+            'titulos' => $titulos,
+            'titucli' => $titucli
+        ]);  
     }
 
     public function store(Request $request)

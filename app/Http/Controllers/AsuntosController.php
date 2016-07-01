@@ -106,7 +106,7 @@ class AsuntosController extends Controller
              return redirect('Asuntos');
          }
           
-         $asunto = asuntos::find($idasu);
+         $asunto = DB::table('asuntos')->where('idasu', $idasu)->whereNull('deleted_at')->get();
           
          return view('asun.edit', [
            'request' => $request,
@@ -172,7 +172,7 @@ class AsuntosController extends Controller
 
          $idasu = htmlentities (trim($idasu),ENT_QUOTES,"UTF-8");
 
-         $asunto = asuntos::find($idasu);
+         $asunto = DB::table('asuntos')->where('idasu', $idasu)->whereNull('deleted_at')->get();
             
          return view('asun.del', [
            'request' => $request,
