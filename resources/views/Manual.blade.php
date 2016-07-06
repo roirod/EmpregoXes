@@ -47,9 +47,9 @@
          <br>   <br>   <br>   <br>
 
 
-      	<div class="col-md-9 col-md-offset-3 pad20">
+      	<div class="col-md-7 col-md-offset-2 pad20 text-center">
 
-  	 		  <img src="{{asset('assets/img/logo.png')}}">
+  	 		  <img src="{{asset('assets/img/logo.png')}}" class="pad10">
 
       	</div>
 

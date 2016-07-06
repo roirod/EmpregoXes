@@ -25,6 +25,7 @@
 				<span class="lead pad4"> 
 
 					<p> &nbsp;{!!$cliente->apecli!!}, {!!$cliente->nomcli!!}</p>
+					<p> &nbsp; dni: {!!$cliente->dni!!} </p>
 
 				</span>
  			</div>

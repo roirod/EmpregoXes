@@ -105,8 +105,10 @@ class AsuntosController extends Controller
          if ( empty($idasu) ) {
              return redirect('Asuntos');
          }
-          
-         $asunto = DB::table('asuntos')->where('idasu', $idasu)->whereNull('deleted_at')->get();
+
+         $idasu = htmlentities (trim($idasu),ENT_QUOTES,"UTF-8");
+
+         $asunto = asuntos::find($idasu);
           
          return view('asun.edit', [
            'request' => $request,
@@ -167,12 +169,12 @@ class AsuntosController extends Controller
     public function del(Request $request,$idasu)
     {
          if ( empty($idasu) ) {
-            return redirect('Asuntos');
+             return redirect('Asuntos');
          }
 
          $idasu = htmlentities (trim($idasu),ENT_QUOTES,"UTF-8");
 
-         $asunto = DB::table('asuntos')->where('idasu', $idasu)->whereNull('deleted_at')->get();
+         $asunto = asuntos::find($idasu);
             
          return view('asun.del', [
            'request' => $request,

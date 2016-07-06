@@ -133,7 +133,7 @@ class ProgramasController extends Controller
 		      
 		    $request->session()->flash('sucmess', 'Hecho!!!');	
 	        	        	
-	        return redirect('Programas/create');
+	        return redirect('Programas');
         }      
     }
   
@@ -209,7 +209,7 @@ class ProgramasController extends Controller
 
             $request->session()->flash('sucmess', 'Hecho!!!');
 
-            return redirect('Programas');
+            return redirect("Programas/$idprog");
 	    }   
     }
     

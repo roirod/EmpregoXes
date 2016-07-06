@@ -26,7 +26,9 @@
 				   <div class="box400">
 						   <table class="table table-hover table-bordered">
 						
-								@foreach ($users as $user)
+								@foreach($users as $user)
+
+									@continue($user->username == 'admin')
 										
 									<tr>
 										<td class="wid95"> {!! $user->username !!} </td>

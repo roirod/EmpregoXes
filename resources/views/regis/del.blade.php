@@ -28,6 +28,10 @@
 
 					<p> &nbsp; {!!$regiscli->nomasu!!} </p>
 
+					<p> &nbsp; {!!date ('d-m-Y', strtotime ($regiscli->fech) )!!} </p>
+
+					<p> &nbsp; {!!$regiscli->notas!!} </p>
+
 				</span>
  			</div>
  			

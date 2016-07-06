@@ -101,13 +101,13 @@ class UsuariosController extends Controller
 		  
 		  $User = User::find($uid);
 		  
-		  $User->passwd = bcrypt($passwd);
+		  $User->password = bcrypt($passwd);
 		  
 		  $User->save();
 		  
 		  $request->session()->flash('sucmess', 'Hecho!!!');
 		        	
-		  return redirect('/Config');
+		  return redirect('Usuarios/create');
     }
 
     public function usudel(Request $request)
@@ -134,7 +134,7 @@ class UsuariosController extends Controller
 
         $request->session()->flash('sucmess', 'Hecho!!!');
         
-        return redirect('Ajustes');
+        return redirect('Usuarios/create');
     }
 
     public function update(Request $request, $id)

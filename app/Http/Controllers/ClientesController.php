@@ -256,10 +256,7 @@ class ClientesController extends Controller
 
         $continua = 0;
 
-        if ($dni == $dnicli) {
-            $continua = 1;
-
-        } else {
+        if ($dni != $dnicli) {
             foreach ($clientes as $clie) {
                 if($clie->dni == $dni) {
                     $messa = 'Repetido. El dni: '.$dni.', pertenece a: 
@@ -269,76 +266,71 @@ class ClientesController extends Controller
 
                     $request->session()->flash('errmess', $messa);
                     return redirect("Clientes/$idcli/edit");
-                } else {
-                    $continua = 1;
-                }    
+                }  
             }
         }
 
-        if ($continua == 1) {       
+        $validator = Validator::make($request->all(),[
+            'apecli' => 'required|max:111',
+            'nomcli' => 'required|max:88',
+            'dni' => 'required|max:12',
+            'naf' => 'max:18',
+            'email' => 'max:66',	            
+            'tel1' => 'max:11',
+            'tel2' => 'max:11',
+            'tel3' => 'max:11',
+            'sexo' => 'max:12',
+            'notas' => '',
+            'direc' => 'max:111',
+            'pobla' => 'max:111',
+            'fenac' => 'date'
+        ]);
+            
+        if ($validator->fails()) {
+	         return redirect("Clientes/$idcli/edit")
+	                     ->withErrors($validator)
+	                     ->withInput();
+	    } else { 
+ 		    		
+    		$fenac = $request->input('fenac');
+    		
+    		$regex = '/^(18|19|20)\d\d[\/\-.](0[1-9]|1[012])[\/\-.](0[1-9]|[12][0-9]|3[01])$/';
+    		
+    		if ( preg_match($regex, $fenac) ) {  } else {
+		 	   $request->session()->flash('errmess', 'Fecha/s incorrecta');
+		 	   return redirect("Clientes/$idcli/edit");
+	 		}
+    		
+    		$clientes = clientes::find($idcli);
+    		  		
+        	$nomcli = ucfirst(strtolower( $request->input('nomcli') ) );
+        	$apecli = ucwords(strtolower( $request->input('apecli') ) );
+        	$notas = ucfirst(strtolower( $request->input('notas') ) );
+        	$direc = ucfirst(strtolower( $request->input('direc') ) );
+        	$pobla = ucfirst(strtolower( $request->input('pobla') ) );
 
-            $validator = Validator::make($request->all(),[
-                'apecli' => 'required|max:111',
-                'nomcli' => 'required|max:88',
-                'dni' => 'required|max:12',
-                'naf' => 'max:18',
-                'email' => 'max:66',	            
-                'tel1' => 'max:11',
-                'tel2' => 'max:11',
-                'tel3' => 'max:11',
-                'sexo' => 'max:12',
-                'notas' => '',
-                'direc' => 'max:111',
-                'pobla' => 'max:111',
-                'fenac' => 'date'
-            ]);
-                
-            if ($validator->fails()) {
-    	         return redirect("Clientes/$idcli/edit")
-    	                     ->withErrors($validator)
-    	                     ->withInput();
-    	    } else { 
-     		    		
-        		$fenac = $request->input('fenac');
-        		
-        		$regex = '/^(18|19|20)\d\d[\/\-.](0[1-9]|1[012])[\/\-.](0[1-9]|[12][0-9]|3[01])$/';
-        		
-        		if ( preg_match($regex, $fenac) ) {  } else {
-    		 	   $request->session()->flash('errmess', 'Fecha/s incorrecta');
-    		 	   return redirect("Clientes/$idcli/edit");
-    	 		}
-        		
-        		$clientes = clientes::find($idcli);
-        		  		
-            	$nomcli = ucfirst(strtolower( $request->input('nomcli') ) );
-            	$apecli = ucwords(strtolower( $request->input('apecli') ) );
-            	$notas = ucfirst(strtolower( $request->input('notas') ) );
-            	$direc = ucfirst(strtolower( $request->input('direc') ) );
-            	$pobla = ucfirst(strtolower( $request->input('pobla') ) );
-
-                $dni = htmlentities (trim($request->input('dni')),ENT_QUOTES,"UTF-8");
-            	
-    			$clientes->nomcli = htmlentities (trim($nomcli),ENT_QUOTES,"UTF-8");
-    			$clientes->apecli = htmlentities (trim($apecli),ENT_QUOTES,"UTF-8");
-    			$clientes->dni = $dni;			
-    			$clientes->naf = htmlentities (trim($request->input('naf')),ENT_QUOTES,"UTF-8");
-    			$clientes->email = htmlentities (trim($request->input('email')),ENT_QUOTES,"UTF-8");
-    			$clientes->tel1 = htmlentities (trim($request->input('tel1')),ENT_QUOTES,"UTF-8");
-    			$clientes->tel2 = htmlentities (trim($request->input('tel2')),ENT_QUOTES,"UTF-8");
-    			$clientes->tel3 = htmlentities (trim($request->input('tel3')),ENT_QUOTES,"UTF-8");
-    			$clientes->sexo = htmlentities (trim($request->input('sexo')),ENT_QUOTES,"UTF-8");
-    			$clientes->notas = htmlentities (trim($notas),ENT_QUOTES,"UTF-8");
-    			$clientes->direc = htmlentities (trim($direc),ENT_QUOTES,"UTF-8");
-    			$clientes->pobla = htmlentities (trim($pobla),ENT_QUOTES,"UTF-8");
-    			$clientes->fenac = htmlentities (trim($request->input('fenac')),ENT_QUOTES,"UTF-8");
-    			
-    			$clientes->save();
-          
-    		    $request->session()->flash('sucmess', 'Hecho!!!');
-    		        	
-    		    return redirect("Clientes/$idcli/edit");
-    	    }
-        }    
+            $dni = htmlentities (trim($request->input('dni')),ENT_QUOTES,"UTF-8");
+        	
+			$clientes->nomcli = htmlentities (trim($nomcli),ENT_QUOTES,"UTF-8");
+			$clientes->apecli = htmlentities (trim($apecli),ENT_QUOTES,"UTF-8");
+			$clientes->dni = $dni;			
+			$clientes->naf = htmlentities (trim($request->input('naf')),ENT_QUOTES,"UTF-8");
+			$clientes->email = htmlentities (trim($request->input('email')),ENT_QUOTES,"UTF-8");
+			$clientes->tel1 = htmlentities (trim($request->input('tel1')),ENT_QUOTES,"UTF-8");
+			$clientes->tel2 = htmlentities (trim($request->input('tel2')),ENT_QUOTES,"UTF-8");
+			$clientes->tel3 = htmlentities (trim($request->input('tel3')),ENT_QUOTES,"UTF-8");
+			$clientes->sexo = htmlentities (trim($request->input('sexo')),ENT_QUOTES,"UTF-8");
+			$clientes->notas = htmlentities (trim($notas),ENT_QUOTES,"UTF-8");
+			$clientes->direc = htmlentities (trim($direc),ENT_QUOTES,"UTF-8");
+			$clientes->pobla = htmlentities (trim($pobla),ENT_QUOTES,"UTF-8");
+			$clientes->fenac = htmlentities (trim($request->input('fenac')),ENT_QUOTES,"UTF-8");
+			
+			$clientes->save();
+      
+		    $request->session()->flash('sucmess', 'Hecho!!!');
+		        	
+		    return redirect("Clientes/$idcli");
+	    }    
     }
 
     public function file(Request $request,$idcli)

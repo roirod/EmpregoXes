@@ -20,13 +20,13 @@
 	    
 	    {!! csrf_field() !!}
 
-		<div class="form-group col-lg-6">
+		<div class="form-group col-lg-11">
 		   
 		   <label class="control-label text-left mar10">Selecciona título/s:</label> 
 		   <br>
 		   Para seleccionar varios mantén pulsado Ctrl
 		   
-		   <select name="selarr[]" class="form-control" style="height:200px;" multiple="multiple" required="required">
+		   <select name="selarr[]" class="form-control" style="height:200px;width:900px;" multiple="multiple" required="required">
 
 			     @foreach($titulos as $titu)
 

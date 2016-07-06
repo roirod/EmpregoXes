@@ -72,7 +72,7 @@ class RegiscliController extends Controller
               
             $request->session()->flash('sucmess', 'Hecho!!!');  
                             
-            return redirect("Regiscli/$idcli/create");
+            return redirect("Clientes/$idcli");
         }      
     }
 

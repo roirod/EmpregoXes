@@ -33,7 +33,7 @@ class EspeciprogController extends Controller
 
         $programa = DB::table('programas')->where('idprog', $idprog)->first();
 
-        $especiali = DB::table('especiali')->orderBy('nomesp', 'ASC')->get();
+        $especiali = DB::table('especiali')->whereNull('deleted_at')->orderBy('nomesp', 'ASC')->get();
 
         $especiprog = DB::table('especiprog')
                         ->where('idprog',$idprog)
